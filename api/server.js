@@ -9,7 +9,7 @@ const port = 3000;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // Serve static files from public directory
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Verify token endpoint
 app.get('/api/verify', async (req, res) => {

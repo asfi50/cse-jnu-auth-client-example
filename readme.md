@@ -39,12 +39,14 @@ The application will be available at `http://localhost:3000`
 ## Project Structure
 
 ```
+├── api/
+│   └── server.js      # Express server
 ├── public/
-│   ├── index.html    # Main application page
-│   ├── success.html  # Authentication callback handler
-│   └── styles.css    # Styling
-├── server.js         # Express server
-└── README.md         # This file
+│   ├── index.html     # Main application page
+│   ├── success.html   # Authentication callback handler
+│   └── styles.css     # Styling
+└── README.md          # This file
+
 ```
 
 ## License
