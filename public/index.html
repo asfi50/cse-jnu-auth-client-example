@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSE JnU Login Demo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="main-container">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-center">
+        <div class="frosted-glass text-center" id="login-container">
+          <h1>Welcome to Question Bank</h1>
+          <p class="lead">Your gateway to academic excellence and collaborative learning</p>
+          <button id="login-btn" class="btn btn-primary">
+            Login with CSE JnU
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right ms-2" viewBox="0 0 16 16">
+              <path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="frosted-glass" id="user-info" style="display: none;">
+          <div class="text-center mb-4">
+            <div class="user-photo mx-auto mb-3">
+              <img id="user-photo" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h2 class="h3 mb-2">Welcome, <span id="user-name" class="text-gradient"></span>!</h2>
+          </div>
+          
+          <div class="user-details mb-4">
+            <p><strong>Email</strong> <span id="user-email"></span></p>
+            <p><strong>Student ID</strong> <span id="user-id"></span></p>
+            <p><strong>Batch</strong> <span id="user-batch"></span></p>
+            <p><strong>Blood Type</strong> <span id="user-blood"></span></p>
+            <p><strong>Birthday</strong> <span id="user-birthday"></span></p>
+            <p><strong>Gender</strong> <span id="user-gender"></span></p>
+          </div>
+
+          <div id="social-links" class="text-center mb-4">
+            <!-- Social links will be added here -->
+          </div>
+
+          <div class="text-center">
+            <button id="logout-btn" class="btn btn-primary">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Popup -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Connect with CSE JnU</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <button id="auth-btn" class="btn btn-success">
+                Sign in with CSE JnU
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function displayUserInfo(user) {
+      document.getElementById('login-container').style.display = 'none';
+      document.getElementById('user-info').style.display = 'block';
+      
+      const userData = typeof user === 'string' ? JSON.parse(user) : user;
+      
+      document.getElementById('user-name').textContent = userData.name;
+      document.getElementById('user-email').textContent = userData.email;
+      document.getElementById('user-id').textContent = userData.meta.student_id;
+      document.getElementById('user-batch').textContent = userData.meta.batch;
+      document.getElementById('user-blood').textContent = userData.meta.blood_type;
+      document.getElementById('user-birthday').textContent = userData.meta.birthday;
+      document.getElementById('user-gender').textContent = userData.meta.gender;
+      document.getElementById('user-photo').src = userData.meta.photo;
+
+      const socialLinks = document.getElementById('social-links');
+      socialLinks.innerHTML = '';
+      
+      // Add social links if they exist
+      if (userData.meta.linkedin || userData.meta.github || userData.meta.facebook) {
+        socialLinks.innerHTML = '<div class="d-flex justify-content-center gap-2">';
+        if (userData.meta.linkedin) {
+          socialLinks.innerHTML += `<a href="${userData.meta.linkedin}" class="social-btn btn btn-outline-light">
+            <i class="bi bi-linkedin"></i> LinkedIn
+          </a>`;
+        }
+        if (userData.meta.github) {
+          socialLinks.innerHTML += `<a href="${userData.meta.github}" class="social-btn btn btn-outline-light">
+            <i class="bi bi-github"></i> GitHub
+          </a>`;
+        }
+        if (userData.meta.facebook) {
+          socialLinks.innerHTML += `<a href="${userData.meta.facebook}" class="social-btn btn btn-outline-light">
+            <i class="bi bi-facebook"></i> Facebook
+          </a>`;
+        }
+        socialLinks.innerHTML += '</div>';
+      }
+    }
+
+    // Check if user is already logged in
+    const user = localStorage.getItem('user');
+    if (user) {
+      displayUserInfo(user);
+    }
+    
+    // Login button click handler
+    document.getElementById('login-btn').addEventListener('click', () => {
+      const siteUrl = window.location.origin;
+      window.location.href = `https://auth.itrrc.com?callback=${siteUrl}/success.html`;
+    });
+
+    // Logout button click handler
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('user');
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>
